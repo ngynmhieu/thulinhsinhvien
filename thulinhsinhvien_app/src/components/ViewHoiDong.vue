@@ -1,25 +1,50 @@
 <script>
+import { getScoreOfSinhVien } from '@/utils/examinee';
+
 export default {
   name: 'ViewHoiDong',
   data() {
     return {
         contestants:[
-            {name: 'HOÀI KHANH', score: 20, color: '#3872BF'},
-            {name: 'HẢI YẾN', score: 100, color: '#FF3131'},
-            {name: 'ĐÌNH PHONG', score: 30, color: '#5E17EB'},
-            {name: 'HOÀI NAM', score: 10, color: '#FF914D'},
-            {name: 'THẢO VI', score: 50, color: '#00BF63'},
-            {name: 'NGỌC QUÝ', score: 40, color: '#FF66C4'},
-        ] 
+            {name: 'HOÀI KHANH', score: 0, color: '#3872BF', apiName: 'hoaikhanh'},
+            {name: 'HẢI YẾN', score: 0, color: '#FF3131', apiName: 'haiyen'},
+            {name: 'ĐÌNH PHONG', score: 0, color: '#5E17EB', apiName: 'dinhphong'},
+            {name: 'HOÀI NAM', score: 0, color: '#FF914D', apiName: 'hoainam'},
+            {name: 'THẢO VI', score: 0, color: '#00BF63', apiName: 'thaovi'},
+            {name: 'NGỌC QUÝ', score: 0, color: '#FF66C4', apiName: 'ngocquy'},
+        ],
+        timer: null,
     }
   },
+
+  mounted() {
+    this.getScored();
+    this.timer = setInterval(() => {
+        this.getScored();
+    }, 2000);
+  },
+
+    beforeUnmount() {
+        clearInterval(this.timer);
+    },
+
   methods: {
     moveNext() {
         this.$router.push('/ban-giam-khao');
     },
     movePrevious() {
         this.$router.push('/ngoc-quy');
-    }
+    },
+    async getScored() {
+        try {
+            for (let i = 0; i < this.contestants.length; i++) {
+                const response = await getScoreOfSinhVien(this.contestants[i].apiName);
+                this.contestants[i].score = response.vote*0.5;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    },
   }
 }
 </script>
@@ -72,7 +97,7 @@ export default {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 180%;
+            font-size: 300%;
             color: #004AAD;
             font-weight: bold;
             width: 65%;
@@ -90,11 +115,11 @@ export default {
                 justify-content: space-between;
                 width: 80%;
                 border: 2px solid #2E9ED3;
-                border-radius: 15px;
+                border-radius: 40px;
                 padding: 2%;
                 padding-left: 5%;
                 span {
-                    font-size: 100%;
+                    font-size: 180%;
                     font-weight: bold;
                     margin: 2%;
                     color: #2E9ED3;

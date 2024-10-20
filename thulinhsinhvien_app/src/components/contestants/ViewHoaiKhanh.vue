@@ -1,22 +1,41 @@
 <script>
+import { getScoreOfSinhVien } from '@/utils/examinee';
 export default {
-  name: 'ViewHaiYen',
+  name: 'ViewHoaiKhanh',
   data() {
     return {
-        numberOfVoters: 40,
+        numberOfVoters: 0,
         icons: Array.from({length: 60}, (_, i) => i),
         contestant: {
             name: 'HOÀI KHANH',
-            score: 20
-        }
+            score: 0
+        },
+        timer: null,
     }
   },
+
+  mounted() {
+    this.getScored();
+    this.timer = setInterval(() => {
+        this.getScored();
+    }, 2000);
+  },
+  beforeUnmount() {
+    clearInterval(this.timer);
+  },
+
   methods: {
     moveNext() {
         this.$router.push('/hai-yen');
     },
-    movePrevious() {
-        this.$router.push('/tong-ket');
+    async getScored() {
+        try {
+            const response = await getScoreOfSinhVien('hoaikhanh');
+            this.numberOfVoters = response.vote;
+            this.contestant.score = this.numberOfVoters*0.5;
+        } catch (error) {
+            console.log(error);
+        }
     }
   }
 }
@@ -28,10 +47,7 @@ export default {
             60
         </div>
         <div class="body">
-            <div class="chevron-left" @click="movePrevious">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z"/>
-                </svg>
+            <div class="chevron-left">
             </div>
             <div class="voters">
                 <div class="title">
@@ -62,7 +78,7 @@ export default {
     </div>
 </template>
 
-<style>
+<style scoped>
 .thi-sinh {
     display: flex;
     flex-direction: column;
@@ -140,7 +156,7 @@ export default {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                font-size: 70%;
+                font-size: 150%;
                 color: #2E9ED3;
                 border: 2px solid #2E9ED3;
                 background-color: white;
@@ -155,7 +171,7 @@ export default {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                font-size: 250%;
+                font-size: 500%;
                 color: white;
                 font-weight: bold;
                 background-color: #004AAD;
@@ -183,24 +199,10 @@ export default {
         .chevron-right:hover {
             opacity: 1;
         }
-
+        
         .chevron-left {
             width: 6%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 5%;
-            opacity: 0.5;
-            transform: scaleX(-1);
-            svg {
-                width: 100%;
-                height: auto;
-                fill: #0CE2F8;
-            }
-        }
-
-        .chevron-left:hover {
-            opacity: 1;
+            display: block;
         }
     }
 }

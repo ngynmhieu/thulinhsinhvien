@@ -1,21 +1,44 @@
 <script>
+import { getScoreOfSinhVien } from '@/utils/examinee';
 export default {
-  name: 'ViewHaiYen',
+  name: 'ViewHoaiNam',
   data() {
     return {
-        numberOfVoters: 40,
+        numberOfVoters: 0,
         icons: Array.from({length: 60}, (_, i) => i),
         contestant: {
             name: 'HOÀI NAM',
-            score: 20
-        }
+            score: 0
+        },
+        timer: null,
     }
-  },  methods: {
+  },
+  
+  mounted() {
+    this.getScored();
+    this.timer = setInterval(() => {
+        this.getScored();
+    }, 2000);
+  },
+  beforeUnmount() {
+    clearInterval(this.timer);
+  },
+
+  methods: {
     moveNext() {
         this.$router.push('/thao-vi');
     },
     movePrevious() {
         this.$router.push('/dinh-phong');
+    },
+    async getScored() {
+        try {
+            const response = await getScoreOfSinhVien('hoainam');
+            this.numberOfVoters = response.vote;
+            this.contestant.score = this.numberOfVoters*0.5;
+        } catch (error) {
+            console.log(error);
+        }
     }
   }
 }
@@ -61,7 +84,7 @@ export default {
     </div>
 </template>
 
-<style>
+<style scoped>
 .thi-sinh {
     display: flex;
     flex-direction: column;
@@ -139,7 +162,7 @@ export default {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                font-size: 70%;
+                font-size: 150%;
                 color: #2E9ED3;
                 border: 2px solid #2E9ED3;
                 background-color: white;
@@ -154,7 +177,7 @@ export default {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                font-size: 250%;
+                font-size: 500%;
                 color: white;
                 font-weight: bold;
                 background-color: #004AAD;
