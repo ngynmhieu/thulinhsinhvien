@@ -1,11 +1,22 @@
 <script>
 export default {
-  name: 'ViewThiSinh',
+  name: 'ViewHaiYen',
   data() {
     return {
         numberOfVoters: 40,
-        score: 20,
         icons: Array.from({length: 60}, (_, i) => i),
+        contestant: {
+            name: 'HẢI YẾN',
+            score: 20
+        }
+    }
+  },
+  methods: {
+    moveNext() {
+        this.$router.push('/dinh-phong');
+    },
+    movePrevious() {
+        this.$router.push('/hoai-khanh');
     }
   }
 }
@@ -17,32 +28,32 @@ export default {
             60
         </div>
         <div class="body">
-            <div class="chevron-left">
+            <div class="chevron-left" @click="movePrevious">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <path d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z"/>
                 </svg>
             </div>
             <div class="voters">
                 <div class="title">
-                    <img src="../assets/hoidonggiamkhao.png" alt="Hoi Dong Giam Khao">
+                    <img src="../../assets/hoidonggiamkhao.png" alt="Hoi Dong Giam Khao">
                 </div>
                 <div class="voters-status">
                     <div v-for="icon in icons" :key="icon" 
                     :id="'icon-' + (icon + 1)" class="voter-icon">
-                        <img v-if="icon < numberOfVoters" src="../assets/voted_icon.png" alt="Icon">
-                        <img v-else src="../assets/notvoted_icon.png" alt="Icon">
+                        <img v-if="icon < numberOfVoters" src="../../assets/voted_icon.png" alt="Icon">
+                        <img v-else src="../../assets/notvoted_icon.png" alt="Icon">
                     </div>
                 </div>
             </div>
             <div class="contestant">
                 <div class="name">
-                    HOÀI THANH
+                    {{ contestant.name }}
                 </div>
                 <div class="score">
-                    {{ score }}
+                    {{ contestant.score }}
                 </div>
             </div>
-            <div class="chevron-right">
+            <div class="chevron-right" @click="moveNext">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <path d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z"/>
                 </svg>
@@ -135,7 +146,7 @@ export default {
                 background-color: white;
                 font-weight: bold;
                 padding: 0.5%;
-                width: 45%;
+                width: 50%;
                 padding: 2%;
                 border-radius: 10px;
             }
@@ -156,7 +167,7 @@ export default {
         }
 
         .chevron-right {
-            width: 8%;
+            width: 6%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -174,7 +185,7 @@ export default {
         }
 
         .chevron-left {
-            width: 8%;
+            width: 6%;
             display: flex;
             justify-content: center;
             align-items: center;
