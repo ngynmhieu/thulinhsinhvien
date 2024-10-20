@@ -1,4 +1,4 @@
-import { readData } from "./firebase.js";
+import { readData, writeData } from "./firebase.js";
 
 export async function getScoreOfSinhVien(name) {
   const scoreOfSinhVien = await readData(`examinees/${name}/sinhvien`);
@@ -40,5 +40,22 @@ export async function login(username, password) {
   } catch (error) {
     console.error(`Xảy ra lỗi trong quá trình đăng ký: ${username}`, error);
     return false;
+  }
+}
+
+export async function getTimeByName(name) {
+  try {
+    const remainingTime = await readData(`examinees/${name}/remainingTime`);
+    return remainingTime
+  } catch (error) {
+    console.error(`bug`);
+  }
+}
+
+export async function setTimeByName(name, time) {
+  try {
+    await writeData(`examinees/${name}/remainingTime`, time);
+  } catch (error) {
+    console.error(`bug`);
   }
 }
