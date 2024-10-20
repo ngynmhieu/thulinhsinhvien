@@ -11,6 +11,7 @@ export default {
             score: 0
         },
         timer: null,
+        isShowStatus: false,
     }
   },
 
@@ -30,6 +31,9 @@ export default {
     },
     movePrevious() {
         this.$router.push('/hai-yen');
+    },
+    toggleStatus() {
+        this.isShowStatus = !this.isShowStatus;
     },
     async getScored() {
         try {
@@ -59,12 +63,15 @@ export default {
                 <div class="title">
                     <img src="../../assets/hoidonggiamkhao.png" alt="Hoi Dong Giam Khao">
                 </div>
-                <div class="voters-status">
+                <div class="voters-status" v-show="isShowStatus">
                     <div v-for="icon in icons" :key="icon" 
                     :id="'icon-' + (icon + 1)" class="voter-icon">
                         <img v-if="icon < numberOfVoters" src="../../assets/voted_icon.png" alt="Icon">
                         <img v-else src="../../assets/notvoted_icon.png" alt="Icon">
                     </div>
+                </div>
+                <div v-show="!isShowStatus" @click="toggleStatus">
+                    <button>Bắt đầu</button>
                 </div>
             </div>
             <div class="contestant">
@@ -128,6 +135,18 @@ export default {
                 img {
                     width: 100%;
                 }
+            }
+
+            button {
+                margin-top: 150%;
+                background-color: #004AAD;
+                color: white;
+                font-size: 100%;
+                padding: 10%;
+                border-radius: 20px;
+                border: none;
+                cursor: pointer;
+                width: 150%;
             }
 
             .voters-status {
