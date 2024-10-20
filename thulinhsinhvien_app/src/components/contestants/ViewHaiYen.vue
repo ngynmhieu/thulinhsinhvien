@@ -163,7 +163,7 @@ export default {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                font-size: 150%;
+                font-size: 80%;
                 color: #2E9ED3;
                 border: 2px solid #2E9ED3;
                 background-color: white;
@@ -178,7 +178,7 @@ export default {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                font-size: 500%;
+                font-size: 300%;
                 color: white;
                 font-weight: bold;
                 background-color: #004AAD;

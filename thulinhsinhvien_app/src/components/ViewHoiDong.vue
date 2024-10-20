@@ -83,7 +83,6 @@ export default {
     align-items: center;
 
     .body {
-        
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -97,7 +96,7 @@ export default {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 300%;
+            font-size: 150%;
             color: #004AAD;
             font-weight: bold;
             width: 65%;
@@ -119,7 +118,7 @@ export default {
                 padding: 2%;
                 padding-left: 5%;
                 span {
-                    font-size: 180%;
+                    font-size: 90%;
                     font-weight: bold;
                     margin: 2%;
                     color: #2E9ED3;
