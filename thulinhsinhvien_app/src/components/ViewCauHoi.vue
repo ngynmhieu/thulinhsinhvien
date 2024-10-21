@@ -44,10 +44,10 @@ export default {
       }
     },
     moveNext() {
-        this.$router.push({ path: 'tong-ket', query: { id: parseInt(this.questionId + 1) }}); // Đường dẫn trang tiếp theo
+        this.$router.push({ path: 'tong-ket', query: { id: parseInt(this.questionId) }}); // Đường dẫn trang tiếp theo
     },
     movePrevious() {
-        this.$router.push({ path: 'tong-ket', query: { id: parseInt(this.questionId - 1) }}); // Đường dẫn trang trước
+        this.$router.push({ path: 'tong-ket', query: { id: this.questionId - 1 }}); // Đường dẫn trang trước
     },
     async getQuestion() {
         try {
