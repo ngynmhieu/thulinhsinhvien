@@ -23,8 +23,7 @@ export async function getRemainingTime(name) {
   else if (name == "thaovi") index = 4;
   else if (name == "ngocquy") index = 5;
 
-  const remainingTime = await readData(`process/steps/${index}/remainingTime`);
-  return remainingTime;
+  return await readData(`process/steps/${index}/remainingTime`);
 }
 
 export async function updateRemainingTime(name, remainingTime) {

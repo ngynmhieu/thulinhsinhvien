@@ -78,9 +78,7 @@ export default {
     async updateServerTime() {
       try {
         // Call API to update the remaining time on the server
-        await this.$axios.post("/api/updateRemainingTime", {
-          remainingTime: this.remainingTime,
-        });
+        
       } catch (error) {
         console.log(error);
       }
