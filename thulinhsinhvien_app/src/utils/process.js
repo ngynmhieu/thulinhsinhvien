@@ -38,3 +38,16 @@ export async function updateRemainingTime(name, remainingTime) {
   // Cập nhật remainingTime trong Firebase
   await writeData(`process/steps/${index}/remainingTime`, remainingTime);
 }
+
+export async function updateIsProcessing(isRun) {
+  const process = await readData(`process`);
+  const index = process.index
+  await writeData(`process/steps/${index}/isProcessing`, isRun)
+}
+
+// Load trang => load remainingTime 
+// Ấn enter thì đếm ngược, câpj nhật isProcessing thành true
+// Vừa đếm ngược vừa up lại lên db
+// Ấn enter lần nữa thì dừng đếm ngược, câpj nhật isProcessing thành fasle
+// Hết giờ thì giữ nguyên giao diện
+
