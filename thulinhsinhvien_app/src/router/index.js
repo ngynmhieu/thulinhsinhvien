@@ -8,6 +8,7 @@ import ViewDinhPhong from '@/components/contestants/ViewDinhPhong.vue'
 import ViewHoaiNam from '@/components/contestants/ViewHoaiNam.vue'
 import ViewThaoVi from '@/components/contestants/ViewThaoVi.vue'
 import ViewNgocQuy from '@/components/contestants/ViewNgocQuy.vue'
+import ViewCauHoi from '@/components/ViewCauHoi.vue'
 
 const routes = [
     {
@@ -59,6 +60,12 @@ const routes = [
         name: 'ViewTongKet',
         component: ViewTongKet,
     },
+    {
+        path: '/:cau-hoi',
+        name: 'ViewCauHoi',
+        component: ViewCauHoi,
+    }
+
 ]
 
 const router = createRouter({

@@ -1,5 +1,5 @@
 <script>
-import { getTotalScore } from '@/utils/examinee';
+import { getScoreOfSinhVien } from '@/utils/examinee';
 
 export default {
   name: 'ViewTongKet',
@@ -13,7 +13,8 @@ export default {
             {name: 'THẢO VI', score: 0, color: '#00BF63', apiName: 'thaovi'},
             {name: 'NGỌC QUÝ', score: 0, color: '#FF66C4', apiName: 'ngocquy'},
         ],
-        timer: null, 
+        timer: null,
+        questionId: 0,
     }
   },
 
@@ -30,6 +31,13 @@ export default {
     window.removeEventListener('keydown', this.handleKeydown); // Xóa lắng nghe sự kiện phím
   },
 
+  created() {
+    if (this.$route.query.id) {
+        this.questionId = parseInt(this.$route.query.id, 10);
+    } else {
+        this.questionId = 0;
+    }
+  },
   methods: {
     handleKeydown(event) {
       if (event.key === 'ArrowRight') {
@@ -39,7 +47,7 @@ export default {
       }
     },
     moveNext() {
-        this.$router.push('/'); // Đường dẫn trang tiếp theo
+        this.$router.push({ path: '/cau-hoi', query: { id: parseInt(this.questionId + 1) }}); // Đường dẫn trang tiếp theo
     },
     movePrevious() {
         this.$router.push('/ban-giam-khao'); // Đường dẫn trang trước
