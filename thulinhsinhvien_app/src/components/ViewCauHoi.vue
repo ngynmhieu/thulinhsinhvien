@@ -142,6 +142,7 @@ export default {
             font-weight: bold;
         }
         .content {
+            min-height: 10vw;
             margin-top: 1%;
             padding: 2% 0%;
             width: 100%;
