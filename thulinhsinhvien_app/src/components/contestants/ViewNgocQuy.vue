@@ -1,5 +1,7 @@
 <script>
 import { getScoreOfSinhVien } from '@/utils/examinee';
+import { getRemainingTime, updateIsProcessing, updateRemainingTime } from "@/utils/process";
+
 export default {
   name: 'ViewNgocQuy',
   data() {
@@ -11,74 +13,91 @@ export default {
             score: 20
         },
         timer: null,
-        countdown: 60,
+        remainingTime: 0,
         countdownActive: false,
-    }
+    };
   },
 
   mounted() {
     this.getScored();
+    this.getRmTime();
     this.timer = setInterval(() => {
         this.getScored();
     }, 2000);
 
-    window.addEventListener('keydown', this.handleKeyDown);
+    window.addEventListener("keydown", this.handleKeyPress);
   },
 
   beforeUnmount() {
     clearInterval(this.timer);
-    window.removeEventListener('keydown', this.handleKeyDown);
+    window.removeEventListener("keydown", this.handleKeyPress);
   },
 
   methods: {
-    async getScored() {
-        try {
-            const response = await getScoreOfSinhVien('ngocquy');
-            this.numberOfVoters = response.vote;
-            this.contestant.score = this.numberOfVoters * 0.5;
-        } catch (error) {
-            console.log(error);
-        }
-    },
-    handleKeyDown(event) {
-        if (event.key === 'ArrowRight') {
-            this.moveNext();
-        } else if (event.key === 'ArrowLeft') {
-            this.movePrevious();
-        } else if (event.key === 'Enter') {
-            if (this.countdownActive) {
-                clearInterval(this.countdownTimer);
-                this.countdownActive = false;
-            } else {
-                this.startCountdown();
-            }
-        }
-    },
     moveNext() {
         this.$router.push('/hoi-dong');
     },
     movePrevious() {
         this.$router.push('/thao-vi');
     },
-    startCountdown() {
+    async getScored() {
+      try {
+        const response = await getScoreOfSinhVien("ngocquy");
+        this.numberOfVoters = response.vote;
+        this.contestant.score = this.numberOfVoters * 0.5;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getRmTime() {
+      try {
+        const response = await getRemainingTime("ngocquy");
+        if (response) {
+            this.remainingTime = response;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    handleKeyPress(event) {
+      if (event.key === "ArrowRight") {
+        this.moveNext();
+      } else if (event.key === "ArrowLeft") {
+        this.movePrevious();
+      } else if (event.key === "Enter") {
+        this.toggleCountdown();
+      }
+    },
+    toggleCountdown() {
+      if (!this.countdownActive) {
         this.countdownActive = true;
-        this.countdownTimer = setInterval(() => {
-            if (this.countdown > 0) {
-                this.countdown--;
-            } else {
-                clearInterval(this.countdownTimer);
-                this.countdownActive = false;
-            }
-        }, 1000);
-    }
-  }
-}
+        updateIsProcessing(true);
+        this.startCountdown();
+      } else {
+        this.countdownActive = false;
+        updateIsProcessing(false);
+        clearInterval(this.timer);
+      }
+    },
+    startCountdown() {
+      this.timer = setInterval(() => {
+        if (this.remainingTime > 0) {
+            this.remainingTime--;
+            updateRemainingTime("ngocquy", this.remainingTime);
+        } else {
+            updateIsProcessing(false);
+            clearInterval(this.timer);
+        }
+      }, 1000);
+    },
+  },
+};
 </script>
 
 <template>
     <div class="thi-sinh">
         <div class="counter">
-            {{ countdown }}
+            {{ remainingTime }}
         </div>
         <div class="body">
             <div class="voters">

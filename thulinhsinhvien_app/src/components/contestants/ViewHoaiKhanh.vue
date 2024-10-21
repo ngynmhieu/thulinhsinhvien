@@ -1,7 +1,8 @@
 <script>
 import { getScoreOfSinhVien } from "@/utils/examinee";
+import { getRemainingTime, updateIsProcessing, updateRemainingTime } from "@/utils/process";
 export default {
-  name: "ViewDinhPhong",
+  name: "ViewHoaiKhanh",
   data() {
     return {
       numberOfVoters: 0,
@@ -11,13 +12,14 @@ export default {
         score: 0,
       },
       timer: null,
-      remainingTime: 60,
+      remainingTime: 0,
       countdownActive: false,
     };
   },
 
   mounted() {
     this.getScored();
+    this.getRmTime();
     this.timer = setInterval(() => {
       this.getScored();
     }, 2000);
@@ -37,9 +39,19 @@ export default {
     },
     async getScored() {
       try {
-        const response = await getScoreOfSinhVien("dinhphong");
+        const response = await getScoreOfSinhVien("hoaikhanh");
         this.numberOfVoters = response.vote;
         this.contestant.score = this.numberOfVoters * 0.5;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getRmTime() {
+      try {
+        const response = await getRemainingTime("hoaikhanh");
+        if (response) {
+            this.remainingTime = response;
+        }
       } catch (error) {
         console.log(error);
       }
@@ -54,31 +66,24 @@ export default {
     toggleCountdown() {
       if (!this.countdownActive) {
         this.countdownActive = true;
+        updateIsProcessing(true);
         this.startCountdown();
       } else {
         this.countdownActive = false;
+        updateIsProcessing(false);
         clearInterval(this.timer);
       }
     },
     startCountdown() {
       this.timer = setInterval(() => {
         if (this.remainingTime > 0) {
-          this.remainingTime--;
+            this.remainingTime--;
+            updateRemainingTime("hoaikhanh", this.remainingTime);
         } else {
-          clearInterval(this.timer);
-          this.updateServerTime();
+            updateIsProcessing(false);
+            clearInterval(this.timer);
         }
       }, 1000);
-    },
-    async updateServerTime() {
-      try {
-        // Call API to update the remaining time on the server
-        await this.$axios.post("/api/updateRemainingTime", {
-          remainingTime: this.remainingTime,
-        });
-      } catch (error) {
-        console.log(error);
-      }
     },
   },
 };

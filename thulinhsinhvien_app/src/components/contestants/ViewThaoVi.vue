@@ -1,5 +1,6 @@
 <script>
 import { getScoreOfSinhVien } from '@/utils/examinee';
+import { getRemainingTime, updateIsProcessing, updateRemainingTime } from "@/utils/process";
 
 export default {
   name: 'ViewThaoVi',
@@ -12,23 +13,24 @@ export default {
             score: 0
         },
         timer: null,
-        countdown: 60,
-        isCounting: false,
-    }
+        remainingTime: 0,
+        countdownActive: false,
+    };
   },
 
   mounted() {
     this.getScored();
+    this.getRmTime();
     this.timer = setInterval(() => {
         this.getScored();
     }, 2000);
 
-    window.addEventListener('keydown', this.handleKeydown);
+    window.addEventListener("keydown", this.handleKeyPress);
   },
-  
+
   beforeUnmount() {
     clearInterval(this.timer);
-    window.removeEventListener('keydown', this.handleKeydown);
+    window.removeEventListener("keydown", this.handleKeyPress);
   },
 
   methods: {
@@ -39,50 +41,63 @@ export default {
         this.$router.push('/hoai-nam');
     },
     async getScored() {
-        try {
-            const response = await getScoreOfSinhVien('thaovi');
-            this.numberOfVoters = response.vote;
-            this.contestant.score = this.numberOfVoters * 0.5;
-        } catch (error) {
-            console.log(error);
-        }
+      try {
+        const response = await getScoreOfSinhVien("thaovi");
+        this.numberOfVoters = response.vote;
+        this.contestant.score = this.numberOfVoters * 0.5;
+      } catch (error) {
+        console.log(error);
+      }
     },
-    handleKeydown(event) {
-        if (event.key === 'ArrowRight') {
-            this.moveNext();
-        } else if (event.key === 'ArrowLeft') {
-            this.movePrevious();
-        } else if (event.key === 'Enter') {
-            if (this.isCounting) {
-                this.stopCountdown();
-            } else {
-                this.startCountdown();
-            }
+    async getRmTime() {
+      try {
+        const response = await getRemainingTime("thaovi");
+        if (response) {
+            this.remainingTime = response;
         }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    handleKeyPress(event) {
+      if (event.key === "ArrowRight") {
+        this.moveNext();
+      } else if (event.key === "ArrowLeft") {
+        this.movePrevious();
+      } else if (event.key === "Enter") {
+        this.toggleCountdown();
+      }
+    },
+    toggleCountdown() {
+      if (!this.countdownActive) {
+        this.countdownActive = true;
+        updateIsProcessing(true);
+        this.startCountdown();
+      } else {
+        this.countdownActive = false;
+        updateIsProcessing(false);
+        clearInterval(this.timer);
+      }
     },
     startCountdown() {
-        this.isCounting = true;
-        this.countdown = 60;
-        this.countdownTimer = setInterval(() => {
-            if (this.countdown > 0) {
-                this.countdown--;
-            } else {
-                this.stopCountdown();
-            }
-        }, 1000);
+      this.timer = setInterval(() => {
+        if (this.remainingTime > 0) {
+            this.remainingTime--;
+            updateRemainingTime("thaovi", this.remainingTime);
+        } else {
+            updateIsProcessing(false);
+            clearInterval(this.timer);
+        }
+      }, 1000);
     },
-    stopCountdown() {
-        this.isCounting = false;
-        clearInterval(this.countdownTimer);
-    }
-  }
-}
+  },
+};
 </script>
 
 <template>
     <div class="thi-sinh">
         <div class="counter">
-            {{ countdown }}
+            {{ remainingTime }}
         </div>
         <div class="body">
             <div class="voters">

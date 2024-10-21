@@ -1,5 +1,7 @@
 <script>
 import { getScoreOfSinhVien } from '@/utils/examinee';
+import { getRemainingTime, updateIsProcessing, updateRemainingTime } from "@/utils/process";
+
 export default {
   name: 'ViewHoaiNam',
   data() {
@@ -11,47 +13,28 @@ export default {
         score: 0,
       },
       timer: null,
-      countdown: 30,
-      isCountingDown: false,
+      remainingTime: 0,
+      countdownActive: false,
     };
   },
 
   mounted() {
     this.getScored();
+    this.getRmTime();
     this.timer = setInterval(() => {
       this.getScored();
     }, 2000);
 
     // Add event listeners for left, right arrow keys and enter
-    window.addEventListener('keydown', this.handleKeyPress);
+    window.addEventListener("keydown", this.handleKeyPress);
   },
 
   beforeUnmount() {
     clearInterval(this.timer);
-    window.removeEventListener('keydown', this.handleKeyPress);
+    window.removeEventListener("keydown", this.handleKeyPress);
   },
 
   methods: {
-    async getScored() {
-      try {
-        const response = await getScoreOfSinhVien('hoainam');
-        this.numberOfVoters = response.vote;
-        this.contestant.score = this.numberOfVoters * 0.5;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-    handleKeyPress(event) {
-      if (event.key === 'ArrowRight') {
-        this.moveNext();
-      } else if (event.key === 'ArrowLeft') {
-        this.movePrevious();
-      } else if (event.key === 'Enter') {
-        this.toggleCountdown();
-      }
-    },
-
     moveNext() {
       this.$router.push('/thao-vi');
     },
@@ -60,29 +43,56 @@ export default {
       this.$router.push('/dinh-phong');
     },
 
-    toggleCountdown() {
-      if (!this.isCountingDown) {
-        this.startCountdown();
-      } else {
-        this.stopCountdown();
+    async getScored() {
+      try {
+        const response = await getScoreOfSinhVien("hoainam");
+        this.numberOfVoters = response.vote;
+        this.contestant.score = this.numberOfVoters * 0.5;
+      } catch (error) {
+        console.log(error);
       }
     },
-
+    async getRmTime() {
+      try {
+        const response = await getRemainingTime("hoainam");
+        if (response) {
+            this.remainingTime = response;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    handleKeyPress(event) {
+      if (event.key === "ArrowRight") {
+        this.moveNext();
+      } else if (event.key === "ArrowLeft") {
+        this.movePrevious();
+      } else if (event.key === "Enter") {
+        this.toggleCountdown();
+      }
+    },
+    toggleCountdown() {
+      if (!this.countdownActive) {
+        this.countdownActive = true;
+        updateIsProcessing(true);
+        this.startCountdown();
+      } else {
+        this.countdownActive = false;
+        updateIsProcessing(false);
+        clearInterval(this.timer);
+      }
+    },
     startCountdown() {
-      this.isCountingDown = true;
-      this.countdownTimer = setInterval(() => {
-        if (this.countdown > 0) {
-          this.countdown--;
+      this.timer = setInterval(() => {
+        if (this.remainingTime > 0) {
+            this.remainingTime--;
+            updateRemainingTime("hoainam", this.remainingTime);
         } else {
-          this.stopCountdown();
+            updateIsProcessing(false);
+            clearInterval(this.timer);
         }
       }, 1000);
     },
-
-    stopCountdown() {
-      this.isCountingDown = false;
-      clearInterval(this.countdownTimer);
-    }
   },
 };
 </script>
@@ -90,7 +100,7 @@ export default {
 <template>
   <div class="thi-sinh">
     <div class="counter">
-      {{ countdown }}
+      {{ remainingTime }}
     </div>
     <div class="body">
       <div class="voters">
