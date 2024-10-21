@@ -20,24 +20,14 @@ export default {
     this.getScored();
     this.timer = setInterval(() => {
         this.getScored();
-    }, 1000);
-
-    window.addEventListener('keydown', this.handleKeydown);
+    }, 2000);
   },
     beforeUnmount() {
         clearInterval(this.timer);
-        window.removeEventListener('keydown', this.handleKeydown);
     },
   methods: {
     movePrevious() {
         this.$router.push('/ban-giam-khao');
-    },
-    handleKeydown(event) {
-      if (event.key === 'ArrowRight') {
-        this.moveNext();
-      } else if (event.key === 'ArrowLeft') {
-        this.movePrevious();
-      }
     },
     async getScored() {
         try {
@@ -56,11 +46,11 @@ export default {
 <template>
     <div class="hoi-dong">
         <div class="body">
-            <!-- <div class="chevron-left" @click="movePrevious">
+            <div class="chevron-left" @click="movePrevious">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <path d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z"/>
                 </svg>
-            </div> -->
+            </div>
             <div class="title">
                 <img src="../assets/tongket.png" alt="Tong ket">
             </div>
@@ -70,8 +60,8 @@ export default {
                     <span :style="{ color: contestant.color }">{{ contestant.score }}</span>
                 </div>
             </div>
-            <!-- <div class="chevron-right" @click="moveNext">
-            </div> -->
+            <div class="chevron-right" @click="moveNext">
+            </div>
         </div>
     </div>
 </template>
