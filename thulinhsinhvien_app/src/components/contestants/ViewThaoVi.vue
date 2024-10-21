@@ -12,6 +12,8 @@ export default {
             score: 0
         },
         timer: null,
+        countdown: 60,
+        isCounting: false,
     }
   },
 
@@ -20,9 +22,13 @@ export default {
     this.timer = setInterval(() => {
         this.getScored();
     }, 2000);
+
+    window.addEventListener('keydown', this.handleKeydown);
   },
+  
   beforeUnmount() {
     clearInterval(this.timer);
+    window.removeEventListener('keydown', this.handleKeydown);
   },
 
   methods: {
@@ -36,10 +42,38 @@ export default {
         try {
             const response = await getScoreOfSinhVien('thaovi');
             this.numberOfVoters = response.vote;
-            this.contestant.score = this.numberOfVoters*0.5;
+            this.contestant.score = this.numberOfVoters * 0.5;
         } catch (error) {
             console.log(error);
         }
+    },
+    handleKeydown(event) {
+        if (event.key === 'ArrowRight') {
+            this.moveNext();
+        } else if (event.key === 'ArrowLeft') {
+            this.movePrevious();
+        } else if (event.key === 'Enter') {
+            if (this.isCounting) {
+                this.stopCountdown();
+            } else {
+                this.startCountdown();
+            }
+        }
+    },
+    startCountdown() {
+        this.isCounting = true;
+        this.countdown = 60;
+        this.countdownTimer = setInterval(() => {
+            if (this.countdown > 0) {
+                this.countdown--;
+            } else {
+                this.stopCountdown();
+            }
+        }, 1000);
+    },
+    stopCountdown() {
+        this.isCounting = false;
+        clearInterval(this.countdownTimer);
     }
   }
 }
@@ -48,14 +82,9 @@ export default {
 <template>
     <div class="thi-sinh">
         <div class="counter">
-            60
+            {{ countdown }}
         </div>
         <div class="body">
-            <div class="chevron-left" @click="movePrevious">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z"/>
-                </svg>
-            </div>
             <div class="voters">
                 <div class="title">
                     <img src="../../assets/hoidonggiamkhao.png" alt="Hoi Dong Giam Khao">
@@ -75,11 +104,6 @@ export default {
                 <div class="score">
                     {{ contestant.score }}
                 </div>
-            </div>
-            <div class="chevron-right" @click="moveNext">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path d="M0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM241 377c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l87-87-87-87c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0L345 239c9.4 9.4 9.4 24.6 0 33.9L241 377z"/>
-                </svg>
             </div>
         </div>
     </div>
@@ -187,43 +211,6 @@ export default {
                 margin-top: 5%;
                 border-radius: 50%;
             }
-        }
-
-        .chevron-right {
-            width: 6%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 5%;
-            opacity: 0.5;
-            svg {
-                width: 100%;
-                height: auto;
-                fill: #0CE2F8;
-            }
-        }
-
-        .chevron-right:hover {
-            opacity: 1;
-        }
-
-        .chevron-left {
-            width: 6%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 5%;
-            opacity: 0.5;
-            transform: scaleX(-1);
-            svg {
-                width: 100%;
-                height: auto;
-                fill: #0CE2F8;
-            }
-        }
-
-        .chevron-left:hover {
-            opacity: 1;
         }
     }
 }
