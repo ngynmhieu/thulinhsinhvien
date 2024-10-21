@@ -1,6 +1,6 @@
 <script>
 import { getScoreOfSinhVien } from '@/utils/examinee';
-import { getRemainingTime, updateIsProcessing, updateRemainingTime } from "@/utils/process";
+import { getRemainingTime, updateIsProcessing, updateRemainingTime, updateIndexProcess } from "@/utils/process";
 
 export default {
   name: 'ViewHaiYen',
@@ -35,11 +35,14 @@ export default {
   },
 
   methods: {
-    moveNext() {
+    async moveNext() {
+      await updateIndexProcess('dinhphong')
       this.$router.push('/dinh-phong');
+
     },
-    movePrevious() {
+    async movePrevious() {
       this.$router.push('/hoai-khanh');
+      await updateIndexProcess('hoaikhanh')
     },
     async getScored() {
       try {
