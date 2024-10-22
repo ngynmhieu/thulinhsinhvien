@@ -1,5 +1,6 @@
 <script>
 import { getScoreOfSinhVien } from '@/utils/examinee';
+import { useConstantStore } from '@/store';
 
 export default {
   name: 'ViewHoiDong',
@@ -38,11 +39,14 @@ export default {
         this.movePrevious(); // Quay về trang trước
       }
     },
+    movePrevious() {
+        useConstantStore().setCurrentContestant(5);
+        this.$router.push(
+            useConstantStore().contestantsOrder[5].path
+        ); // Đường dẫn trang trước
+    },
     moveNext() {
         this.$router.push('/ban-giam-khao'); // Đường dẫn trang tiếp theo
-    },
-    movePrevious() {
-        this.$router.push('/ngoc-quy'); // Đường dẫn trang trước
     },
     async getScored() {
         try {
@@ -99,6 +103,7 @@ export default {
             color: #004AAD;
             font-weight: bold;
             width: 65%;
+            font-family: 'utm_avo_bold';
         }
         .score-board {
             display: flex;
@@ -116,6 +121,7 @@ export default {
                 border-radius: 40px;
                 padding: 2%;
                 padding-left: 5%;
+                font-family: 'utm_avo_bold';
                 span {
                     font-size: 90%;
                     font-weight: bold;

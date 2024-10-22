@@ -1,5 +1,6 @@
 <script>
 import { getCurrentPart2addScore, getCurrentPart2Score, getScoreOfChandungthulinh, setCurrentPart2addScore, setCurrentPart2Score } from '@/utils/examinee';
+import { updateIndexQuestion } from '@/utils/exam';
 
 export default {
   name: 'ViewTongKet',
@@ -62,15 +63,16 @@ export default {
         }, 2000);
       }
     },
-    moveNext() {
-        this.$router.push({ path: '/cau-hoi', query: { id: this.questionId + 1 }}); // Đường dẫn trang tiếp theo
-    },
     movePrevious() {
         if (this.questionId > 0) {
             this.$router.push({ path: '/cau-hoi', query: { id: this.questionId }}); // Đường dẫn trang trước
         } else {
             this.$router.push('/ban-giam-khao'); // Đường dẫn trang trước
         }
+    },
+    moveNext() {
+        updateIndexQuestion(this.questionId);
+        this.$router.push({ path: '/cau-hoi', query: { id: this.questionId + 1 }}); // Đường dẫn trang tiếp theo
     },
     async getScored() {
         try {

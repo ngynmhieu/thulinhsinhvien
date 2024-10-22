@@ -1,6 +1,6 @@
 <script>
-import { updateIndexQuestion, updateIsRun } from '@/utils/exam';
 import { getQuestionByIndex } from '@/utils/questionBank';
+import { updateIsRun } from '@/utils/exam';
 
 export default {
   name: 'ViewCauHoi',
@@ -17,10 +17,12 @@ export default {
         questionId: 0,
         timer: null,
         isTimeOut: false,
+        isShowCauHoi: false,
     }
   },
 
   mounted() {
+    this.getQuestion();
     window.addEventListener('keydown', this.handleKeydown); // Thêm lắng nghe sự kiện phím
   },
 
@@ -41,10 +43,13 @@ export default {
       } else if (event.key === 'ArrowLeft') {
         this.movePrevious(); // Quay về trang trước
       } else if (event.key === 's') {
-        updateIndexQuestion(this.questionId - 1);
         updateIsRun(true);
-        this.getQuestion();
+        this.isShowCauHoi = true;
         this.startCountdown();
+      } else if (event.key === 'p') {
+        updateIsRun(false);
+        this.isShowCauHoi = false;
+        clearInterval(this.timer);
       }
     },
     moveNext() {
@@ -60,15 +65,12 @@ export default {
             const response = await getQuestionByIndex(this.questionId - 1);
             if (response) {
                 this.cauHoi = response.question;
-                let randomArray = response.otherAnswer;
-                let randomIndex = Math.floor(Math.random() * 4);
-                randomArray.splice(randomIndex, 0, response.correctAnswer);
-                this.options.forEach ((option, index) => {
-                    option.content = randomArray[index];
-                    if (option.content === response.correctAnswer) {
-                        option.correct = true;
+                this.options.forEach(element => {
+                    element.content = response.answers[element.index];
+                    if (element.index === response.correctAnswer) {
+                        element.correct = true;
                     } else {
-                        option.correct = false;
+                        element.correct = false;
                     }
                 });
             }
@@ -94,15 +96,17 @@ export default {
     <div class="cau-hoi">
         <div class="counter">{{ remainingTime }}</div>
         <div class="question-text">
-            <span>CÂU HỎI {{ this.questionId }}</span>
+            <span class="cauhoi-title">CÂU HỎI {{ this.questionId }}</span>
             <div class="content">
-                <span>{{ this.cauHoi }}</span>
+                <span class="cauhoi-title" v-show="isShowCauHoi">{{ this.cauHoi }}</span>
             </div>
             <div class="options">
                 <div class="option" v-for="option in options" :key="option.index">
-                    <div class="option-title" :class="{ 'correct-answer': (isTimeOut && option.correct) }">{{ option.index }}</div>
+                    <div class="option-title" :class="{ 'correct-answer': (isTimeOut && option.correct) }">
+                        {{ option.index }}
+                    </div>
                     <div class="option-content" :class="{ 'correct-answer': (isTimeOut && option.correct) }">
-                        {{ option.content }}
+                        <span v-show="isShowCauHoi">{{ option.content }}</span>
                     </div>
                 </div>
             </div>
@@ -136,7 +140,8 @@ export default {
         justify-content: left;
         align-items: left;
         flex-direction: column;
-        span {
+        font-family: 'utm_avo_bold';
+        .cauhoi-title {
             margin-left: 3%;
             font-size: 100%;
             color: red;
@@ -172,7 +177,7 @@ export default {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             grid-template-rows: repeat(2, 1fr);
-            row-gap: 13%;
+            row-gap: 25%;
             column-gap: 5%;
             justify-items: stretch;
             .option {
@@ -187,7 +192,7 @@ export default {
                     background-color: #004aad;
                     border-radius: 15px;
                     padding: 1%;
-                    height: 7vw;
+                    height: 8.5vw;
                     width: 5%;
                     font-size: 120%;
                     color: white;
@@ -200,12 +205,14 @@ export default {
                     }
                 }
                 .option-content {
+                    font-family: 'utm_avo';
                     background-color: white;
                     border-radius: 10px;
                     padding: 1%;
                     padding-left: 20%;
                     padding-right: 5%;
-                    height: 7vw;
+                    padding-bottom: 1%;
+                    min-height: 7vw;
                     width: 80%;
                     font-size: 60%;
                     color:#004aad;

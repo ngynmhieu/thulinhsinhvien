@@ -13,7 +13,7 @@ import ViewCauHoi from '@/components/ViewCauHoi.vue'
 const routes = [
     {
         path: '/',
-        redirect: '/hoai-khanh',
+        redirect: '/ngoc-quy'
     },
     {
         path: '/hoai-khanh',

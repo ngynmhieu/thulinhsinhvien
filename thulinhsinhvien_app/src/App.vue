@@ -25,3 +25,15 @@ export default {
     <ViewBackGround :questionId="this.questionId"></ViewBackGround>
   </div>
 </template>
+
+
+<style>
+@font-face {
+  font-family: 'utm_avo_bold';
+  src: url('assets/utm_avo_bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'utm_avo';
+  src: url('assets/utm_avo.ttf') format('truetype');
+}
+</style>
