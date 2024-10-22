@@ -1,6 +1,7 @@
 import { readData, writeData } from "./firebase"
 
 // Khi chuyển trang câu hỏi bằng các phím mũi tên (-> bà <-), cập nhật lại chỉ số câu hỏi
+// Bắt đầu từ 0
 export async function updateIndexQuestion(index) {
     try {
         await writeData("exam/questionIndex", index);

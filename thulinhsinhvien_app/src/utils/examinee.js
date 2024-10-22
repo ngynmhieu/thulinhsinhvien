@@ -16,29 +16,20 @@ export async function getTotalScore(name) {
   return scoreOfBgk;
 }
 
-export async function login(username, password) {
-  try {
-    // Đọc dữ liệu từ Firebase
-    const accounts = await readData("accounts");
+export async function getCurrentPart2Score(name) {
 
-    // Kiểm tra dữ liệu có tồn tại không
-    if (!accounts || typeof accounts !== "object") {
-      console.log("Xảy ra lỗi khi đọc dữ liệu về tài khoản");
-      return false;
-    }
-
-    const accountList = Object.values(accounts);
-
-    // Tìm kiếm tài khoản
-    const isValid = accountList.some(
-      (account) =>
-        account.username === username && account.password === password
-    );
-
-    // Trả về kết quả
-    return isValid;
-  } catch (error) {
-    console.error(`Xảy ra lỗi trong quá trình đăng ký: ${username}`, error);
-    return false;
-  }
 }
+
+export async function getCurrentPart2addScore(name) {
+  
+}
+
+
+export async function setCurrentPart2Score(name) {
+
+}
+
+export async function setCurrentPart2addScore(name) {
+  
+}
+
