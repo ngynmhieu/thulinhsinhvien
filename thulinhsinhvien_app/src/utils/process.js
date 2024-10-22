@@ -7,7 +7,7 @@ export async function updateIndexProcess(name) {
   else if (name == "hoainam") await writeData("process/index", 3);
   else if (name == "thaovi") await writeData("process/index", 4);
   else if (name == "ngocquy") await writeData("process/index", 5);
-  else if (name == "done") await writeData("process/index", -1);
+  else await writeData("process/index", -1);
 }
 
 export async function getIndexProcess() {

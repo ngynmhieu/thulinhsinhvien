@@ -1,6 +1,6 @@
 <script>
 import { getScoreOfSinhVien } from '@/utils/examinee';
-import { getRemainingTime, updateIsProcessing, updateRemainingTime } from "@/utils/process";
+import { getRemainingTime, updateIsProcessing, updateRemainingTime, updateIndexProcess } from "@/utils/process";
 
 export default {
   name: 'ViewThaoVi',
@@ -34,10 +34,12 @@ export default {
   },
 
   methods: {
-    moveNext() {
+    async moveNext() {
+      await updateIndexProcess('ngocquy')
         this.$router.push('/ngoc-quy');
     },
-    movePrevious() {
+    async movePrevious() {
+      await updateIndexProcess('hoainam')
         this.$router.push('/hoai-nam');
     },
     async getScored() {
