@@ -34,17 +34,17 @@ export async function getScoreOfChandungthulinh(name) {
 
 // Trả về số điểm, vd: 60
 export async function getCurrentPart2Score(name) {
-  return await readData(`examinees/${name}/thulinhsinhvien/currentScore`);
+  return await readData(`examinees/${name}/thulinhchinhphuc/currentScore`);
 }
 
 export async function getCurrentPart2addScore(name) {
-  return await readData(`examinees/${name}/thulinhsinhvien/plusScore`);
+  return await readData(`examinees/${name}/thulinhchinhphuc/plusScore`);
 }
 
 export async function setCurrentPart2Score(name, score) {
-  await writeData(`examinees/${name}/thulinhsinhvien/currentScore`, score);
+  await writeData(`examinees/${name}/thulinhchinhphuc/currentScore`, score);
 }
 
 export async function setCurrentPart2addScore(name, score) {
-  await writeData(`examinees/${name}/thulinhsinhvien/currentScore`, score);
+  await writeData(`examinees/${name}/thulinhchinhphuc/plusScore`, score);
 }

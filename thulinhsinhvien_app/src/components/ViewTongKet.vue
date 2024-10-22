@@ -79,6 +79,7 @@ export default {
             if (this.isQuestion){
                 for (let i = 0; i < this.contestants.length; i++) {
                     const response = await getCurrentPart2Score(this.contestants[i].apiName);
+                    this.contestants[i].score = response;
                 }
             } else {
                 for (let i = 0; i < this.contestants.length; i++) {
