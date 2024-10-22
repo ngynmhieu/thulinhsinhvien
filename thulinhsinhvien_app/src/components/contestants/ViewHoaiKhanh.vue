@@ -8,7 +8,7 @@ export default {
       numberOfVoters: 0,
       icons: Array.from({ length: 60 }, (_, i) => i),
       contestant: {
-        name: "HOÀI KHÁNH",
+        name: "HOÀI KHANH",
         score: 0,
       },
       timer: null,

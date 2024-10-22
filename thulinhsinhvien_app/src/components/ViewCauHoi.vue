@@ -1,4 +1,5 @@
 <script>
+import { updateIndexQuestion, updateIsRun } from '@/utils/exam';
 import { getQuestionByIndex } from '@/utils/questionBank';
 
 export default {
@@ -30,6 +31,7 @@ export default {
 
   created() {
     this.questionId = parseInt(this.$route.query.id, 10);
+    this.$emit('questionId', this.questionId);
   },
 
   methods: {
@@ -39,14 +41,18 @@ export default {
       } else if (event.key === 'ArrowLeft') {
         this.movePrevious(); // Quay về trang trước
       } else if (event.key === 's') {
+        updateIndexQuestion(this.questionId - 1);
+        updateIsRun(true);
         this.getQuestion();
         this.startCountdown();
       }
     },
     moveNext() {
+        updateIsRun(false);
         this.$router.push({ path: 'tong-ket', query: { id: parseInt(this.questionId) }}); // Đường dẫn trang tiếp theo
     },
     movePrevious() {
+        updateIsRun(false);
         this.$router.push({ path: 'tong-ket', query: { id: this.questionId - 1 }}); // Đường dẫn trang trước
     },
     async getQuestion() {
@@ -200,7 +206,7 @@ export default {
                     padding-left: 20%;
                     padding-right: 5%;
                     height: 7vw;
-                    width: 70%;
+                    width: 80%;
                     font-size: 60%;
                     color:#004aad;
                     font-weight: bold;

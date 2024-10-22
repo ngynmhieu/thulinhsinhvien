@@ -1,6 +1,9 @@
 <script>
 export default {
   name: 'ViewBackGround',
+  props: {
+    questionId: Number,
+  },
 }
 </script>
 
@@ -8,7 +11,11 @@ export default {
     <div class="background">
         <div class="header">
             <img src="../assets/logo.png" alt="Logo" id="logo">
-            <img src="../assets/phanthi.png" alt="PhanThi" id="phan-thi">
+            <img v-show="(this.questionId == 0)" 
+            src="../assets/phanthi.png" alt="PhanThi" id="phan-thi">
+            <img v-show="(this.questionId > 0) && (this.questionId <=20)"
+            src="../assets/thulinhchinhphuc_logo.png" alt="PhanThi" id="phan-thi">
+
         </div>
         <div class="footer">
             <img src="../assets/topleft.png" alt="left" id="leftbottom">

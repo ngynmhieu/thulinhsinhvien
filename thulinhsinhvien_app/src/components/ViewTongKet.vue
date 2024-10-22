@@ -1,20 +1,21 @@
 <script>
-import { getScoreOfChandungthulinh } from '@/utils/examinee';
+import { getCurrentPart2addScore, getCurrentPart2Score, getScoreOfChandungthulinh, setCurrentPart2addScore, setCurrentPart2Score } from '@/utils/examinee';
 
 export default {
   name: 'ViewTongKet',
   data() {
     return {
         contestants:[
-            {name: 'HOÀI KHANH', score: 0, color: '#3872BF', apiName: 'hoaikhanh', scored: false},
-            {name: 'HẢI YẾN', score: 0, color: '#FF3131', apiName: 'haiyen', scored: false},
-            {name: 'ĐÌNH PHONG', score: 0, color: '#5E17EB', apiName: 'dinhphong', scored: false},
-            {name: 'HOÀI NAM', score: 0, color: '#FF914D', apiName: 'hoainam', scored: false},
-            {name: 'THẢO VI', score: 0, color: '#00BF63', apiName: 'thaovi', scored: false},
-            {name: 'NGỌC QUÝ', score: 0, color: '#FF66C4', apiName: 'ngocquy', scored: false},
+            {name: 'HOÀI KHANH', score: 0, color: '#3872BF', apiName: 'hoaikhanh', addScore: 10},
+            {name: 'HẢI YẾN', score: 0, color: '#FF3131', apiName: 'haiyen', addScore: 0},
+            {name: 'ĐÌNH PHONG', score: 0, color: '#5E17EB', apiName: 'dinhphong', addScore: 0},
+            {name: 'HOÀI NAM', score: 0, color: '#FF914D', apiName: 'hoainam', addScore: 0},
+            {name: 'THẢO VI', score: 0, color: '#00BF63', apiName: 'thaovi', addScore: 0},
+            {name: 'NGỌC QUÝ', score: 0, color: '#FF66C4', apiName: 'ngocquy', addScore: 0},
         ],
         timer: null,
         questionId: 0,
+        isShowScore: false,
     }
   },
 
@@ -22,6 +23,7 @@ export default {
     this.timer = setInterval(() => {
         this.getScored();
     }, 2000);
+    this.getAddScore();
     window.addEventListener('keydown', this.handleKeydown); // Thêm lắng nghe sự kiện phím
   },
 
@@ -33,8 +35,10 @@ export default {
   created() {
     if (this.$route.query.id) {
         this.questionId = parseInt(this.$route.query.id, 10);
+        this.$emit('questionId', this.questionId);
     } else {
         this.questionId = 0;
+        this.$emit('questionId', this.questionId);
     }
   },
 
@@ -46,6 +50,16 @@ export default {
         }
       } else if (event.key === 'ArrowLeft') {
         this.movePrevious(); // Quay về trang trước
+      } else if (event.key === 'u' && this.isQuestion) {
+        this.isShowScore = true;
+        setTimeout(() => {
+            for (let i = 0; i < this.contestants.length; i++) {
+                this.contestants[i].score += this.contestants[i].addScore;
+                this.contestants[i].addScore = 0;
+                setCurrentPart2Score(this.contestants[i].apiName, this.contestants[i].score, this.questionId - 1);
+                setCurrentPart2addScore(this.contestants[i].apiName, this.contestants[i].addScore, this.questionId - 1);
+            }
+        }, 2000);
       }
     },
     moveNext() {
@@ -60,14 +74,36 @@ export default {
     },
     async getScored() {
         try {
-            for (let i = 0; i < this.contestants.length; i++) {
-                const response = await getScoreOfChandungthulinh(this.contestants[i].apiName);
-                this.contestants[i].score = response;
+            if (this.isQuestion){
+                for (let i = 0; i < this.contestants.length; i++) {
+                    const response = await getCurrentPart2Score(this.contestants[i].apiName);
+                }
+            } else {
+                for (let i = 0; i < this.contestants.length; i++) {
+                    const response = await getScoreOfChandungthulinh(this.contestants[i].apiName);
+                    this.contestants[i].score = response;
+                }
             }
         } catch (error) {
             console.log(error);
         }
     },
+    async getAddScore() {
+        try {
+            for (let i = 0; i < this.contestants.length; i++) {
+                const response = await getCurrentPart2addScore(this.contestants[i].apiName);
+                this.contestants[i].addScore = response;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+  },
+
+  computed: {
+    isQuestion() {
+        return this.questionId > 0 && this.questionId <= 20;
+    }
   }
 }
 </script>
@@ -83,7 +119,7 @@ export default {
                 <div v-for="contestant in contestants" :key="contestant.name" class="contestant">
                     <span>{{ contestant.name }}</span>
                     <span :style="{ color: contestant.color }">{{ contestant.score }}</span>
-                    <span v-show="contestant.scored" class="points">+10</span>
+                    <span v-show="contestant.addScore && this.isShowScore" class="points">+ {{ contestant.addScore }}</span>
                 </div>
             </div>
         </div>
