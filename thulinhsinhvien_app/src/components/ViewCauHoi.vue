@@ -44,10 +44,10 @@ export default {
       }
     },
     moveNext() {
-        this.$router.push({ path: 'tong-ket', query: { id: parseInt(this.questionId + 1) }}); // Đường dẫn trang tiếp theo
+        this.$router.push({ path: 'tong-ket', query: { id: parseInt(this.questionId) }}); // Đường dẫn trang tiếp theo
     },
     movePrevious() {
-        this.$router.push({ path: 'tong-ket', query: { id: parseInt(this.questionId - 1) }}); // Đường dẫn trang trước
+        this.$router.push({ path: 'tong-ket', query: { id: this.questionId - 1 }}); // Đường dẫn trang trước
     },
     async getQuestion() {
         try {
@@ -142,6 +142,7 @@ export default {
             font-weight: bold;
         }
         .content {
+            min-height: 10vw;
             margin-top: 1%;
             padding: 2% 0%;
             width: 100%;
