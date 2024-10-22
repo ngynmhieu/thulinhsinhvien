@@ -1,5 +1,5 @@
 <script>
-import { getScoreOfSinhVien } from '@/utils/examinee';
+import { getScoreOfBgk } from '@/utils/examinee';
 
 export default {
   name: 'ViewBanGiamKhao',
@@ -47,8 +47,8 @@ export default {
     async getScored() {
         try {
             for (let i = 0; i < this.contestants.length; i++) {
-                const response = await getScoreOfSinhVien(this.contestants[i].apiName);
-                this.contestants[i].score = response.vote * 0.5;
+                const response = await getScoreOfBgk(this.contestants[i].apiName);
+                this.contestants[i].score = response;
             }
         } catch (error) {
             console.log(error);

@@ -1,5 +1,5 @@
 <script>
-import { getScoreOfSinhVien } from '@/utils/examinee';
+import { getScoreOfChandungthulinh } from '@/utils/examinee';
 
 export default {
   name: 'ViewTongKet',
@@ -19,7 +19,9 @@ export default {
   },
 
   mounted() {
-    this.getScored();
+    this.timer = setInterval(() => {
+        this.getScored();
+    }, 2000);
     window.addEventListener('keydown', this.handleKeydown); // Thêm lắng nghe sự kiện phím
   },
 
@@ -59,8 +61,8 @@ export default {
     async getScored() {
         try {
             for (let i = 0; i < this.contestants.length; i++) {
-                const response = await getScoreOfSinhVien(this.contestants[i].apiName);
-                this.contestants[i].score = response.vote * 0.5;
+                const response = await getScoreOfChandungthulinh(this.contestants[i].apiName);
+                this.contestants[i].score = response;
             }
         } catch (error) {
             console.log(error);
