@@ -46,7 +46,7 @@ export default {
         ); // Đường dẫn trang trước
     },
     moveNext() {
-        this.$router.push('/ban-giam-khao'); // Đường dẫn trang tiếp theo
+        this.$router.push('/bgk-score'); // Đường dẫn trang tiếp theo
     },
     async getScored() {
         try {

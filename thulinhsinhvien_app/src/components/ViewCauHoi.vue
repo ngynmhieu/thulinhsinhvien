@@ -52,13 +52,13 @@ export default {
         clearInterval(this.timer);
       }
     },
-    moveNext() {
-        updateIsRun(false);
-        this.$router.push({ path: 'tong-ket', query: { id: parseInt(this.questionId) }}); // Đường dẫn trang tiếp theo
-    },
     movePrevious() {
         updateIsRun(false);
         this.$router.push({ path: 'tong-ket', query: { id: this.questionId - 1 }}); // Đường dẫn trang trước
+    },
+    moveNext() {
+        updateIsRun(false);
+        this.$router.push({ path: 'tong-ket', query: { id: parseInt(this.questionId) }}); // Đường dẫn trang tiếp theo
     },
     async getQuestion() {
         try {

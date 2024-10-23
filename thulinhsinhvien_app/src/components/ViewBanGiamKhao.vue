@@ -39,10 +39,10 @@ export default {
       }
     },
     moveNext() {
-        this.$router.push('/tong-ket'); // Đường dẫn trang tiếp theo
+        this.$router.push('/tong-phan-thi-gmtl'); // Đường dẫn trang tiếp theo
     },
     movePrevious() {
-        this.$router.push('/hoi-dong'); // Đường dẫn trang trước
+        this.$router.push('/bgk-score'); // Đường dẫn trang trước
     },
     async getScored() {
         try {

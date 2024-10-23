@@ -67,7 +67,7 @@ export default {
         if (this.questionId > 0) {
             this.$router.push({ path: '/cau-hoi', query: { id: this.questionId }}); // Đường dẫn trang trước
         } else {
-            this.$router.push('/ban-giam-khao'); // Đường dẫn trang trước
+            this.$router.push('/tong-phan-thi-gmtl'); // Đường dẫn trang trước
         }
     },
     moveNext() {

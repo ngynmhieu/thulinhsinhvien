@@ -9,6 +9,8 @@ import ViewHoaiNam from '@/components/contestants/ViewHoaiNam.vue'
 import ViewThaoVi from '@/components/contestants/ViewThaoVi.vue'
 import ViewNgocQuy from '@/components/contestants/ViewNgocQuy.vue'
 import ViewCauHoi from '@/components/ViewCauHoi.vue'
+import ViewBanGiamKhaoScore from '@/components/ViewBanGiamKhaoScore.vue'
+import ViewTongPhanThiGMTL from '@/components/ViewTongPhanThiGMTL.vue'
 
 const routes = [
     {
@@ -56,6 +58,11 @@ const routes = [
         component: ViewBanGiamKhao,
     },
     {
+        path: '/tong-phan-thi-gmtl',
+        name: 'ViewTongPhanThiGMTL',
+        component: ViewTongPhanThiGMTL,
+    },
+    {
         path: '/tong-ket',
         name: 'ViewTongKet',
         component: ViewTongKet,
@@ -64,7 +71,12 @@ const routes = [
         path: '/:cau-hoi',
         name: 'ViewCauHoi',
         component: ViewCauHoi,
-    }
+    },
+    {
+        path: '/bgk-score',
+        name: 'ViewBanGiamKhaoScore',
+        component: ViewBanGiamKhaoScore,
+    },
 
 ]
 
