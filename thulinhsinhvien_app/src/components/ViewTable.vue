@@ -6,13 +6,13 @@ export default {
     },
     data () {
         return {
-            contestants:[
-                {name: 'HOÀI KHANH'},
-                {name: 'HẢI YẾN'},
-                {name: 'ĐÌNH PHONG'},
-                {name: 'HOÀI NAM'},
-                {name: 'THẢO VI'},
-                {name: 'NGỌC QUÝ'},
+            contestants: [
+                { name: 'HOÀI KHANH', score: 0, color: '#3872BF', apiName: 'hoaikhanh' },
+                { name: 'HẢI YẾN', score: 0, color: '#FF3131', apiName: 'haiyen' },
+                { name: 'ĐÌNH PHONG', score: 0, color: '#5E17EB', apiName: 'dinhphong' },
+                { name: 'HOÀI NAM', score: 0, color: '#FF914D', apiName: 'hoainam' },
+                { name: 'THẢO VI', score: 0, color: '#00BF63', apiName: 'thaovi' },
+                { name: 'NGỌC QUÝ', score: 0, color: '#FF66C4', apiName: 'ngocquy' },
             ],
         }
     },
@@ -32,8 +32,9 @@ export default {
             </thead>
             <tbody>
                 <tr class="content" v-for="(contestant, conIndex) in contestants" :key="conIndex">
-                    <td class="contestant">{{ contestant.name }}</td>
-                    <td class="scores" v-for="(judgeScore, scoreID) in insertedColumns" :key="scoreID">
+                    <td class="contestant" :style="{color: contestant.color}">{{ contestant.name }}</td>
+                    <td class="scores" v-for="(judgeScore, scoreID) in insertedColumns" :key="scoreID"
+                    :style="{color: contestant.color}">
                         {{ judgeScore.scores[conIndex] }}
                     </td>
                 </tr>
@@ -44,33 +45,32 @@ export default {
 
 <style scoped>
 .table {
-    margin-top: 20%;
+    margin-top: 15%;
     font-family: 'utm_avo_bold';
 }
 
 table {
-    border-collapse: collapse; /* Kết hợp các viền lại với nhau */
     width: 100%; /* Đảm bảo bảng chiếm toàn bộ chiều rộng */
 }
 
 .column, .contestant, .scores {
-    border: 1px solid #000; /* Viền màu đen cho cột và hàng */
     padding: 0.5%; /* Thêm khoảng cách cho nội dung */
 }
 
 .column {
-    font-size: 75%;
+    font-size: 70%;
 }
 
 .scores {
     text-align: center;
     vertical-align: middle;
-    font-family: 'utm_avo' !important;
+    font-family: 'utm_avo_bold' !important;
     font-size: 90%;
 }
 
 .contestant {
     font-size: 70%;
-    width: 15%; /* Chiều rộng cột tên thí sinh */
+    width: 15%;
+    text-align: center;
 }
 </style>
